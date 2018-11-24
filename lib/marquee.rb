@@ -9,8 +9,6 @@ class Marquee
     end
   end
 
-  include Enumerable
-
   def initialize(string, font, options = Marquee::Options.new)
     @options = options
     @string = string
