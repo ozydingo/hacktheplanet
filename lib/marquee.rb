@@ -16,9 +16,9 @@ class Marquee
     @string.length > 0 or raise ArgumentError, "Must provide non-zero length string"
   end
 
-  def each_column(&blk)
-    return enum_for(:each_column) unless block_given?
-    each_letter do |letter|
+  def each_column(repeat: true, &blk)
+    return enum_for(:each_column, repeat: repeat) unless block_given?
+    each_letter(repeat: repeat) do |letter|
       if letter == "\t"
         yield_tab_spacing(&blk)
       else
@@ -29,12 +29,13 @@ class Marquee
     end
   end
 
-  def each_letter
-    return enum_for(:each_letter) unless block_given?
+  def each_letter(repeat: true)
+    return enum_for(:each_letter, repeat: repeat) unless block_given?
     loop do
       @string.each_char do |letter|
         yield letter
       end
+      break if !repeat
       yield "\t"
     end
   end
