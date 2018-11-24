@@ -21,4 +21,9 @@ class Font
   def parse(file_data)
     file_data.split("\n").map{|line| line.split(//).map(&:to_i)}
   end
+
+  def height
+    # TODO: customize and/or read from data
+    5
+  end
 end

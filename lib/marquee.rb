@@ -23,12 +23,11 @@ class Marquee
     ii = 0
     each_letter do |letter|
       if letter == "\t"
-        # TODO: determine column length from font
-        yield_tab_spacing(5, &blk)
+        yield_tab_spacing(&blk)
       else
         columns = @font.get(letter).transpose
         yield_letter_columns(columns, &blk)
-        yield_letter_spacing(columns.first.length, &blk)
+        yield_letter_spacing(&blk)
       end
     end
   end
@@ -51,15 +50,15 @@ class Marquee
     end
   end
 
-  def yield_letter_spacing(column_length)
+  def yield_letter_spacing
     @options.letter_spacing.times do
-      yield [0] * column_length
+      yield [0] * @font.height
     end
   end
 
-  def yield_tab_spacing(column_length)
+  def yield_tab_spacing
     @options.tab_spacing.times do
-      yield [0] * column_length
+      yield [0] * @font.height
     end
   end
 
