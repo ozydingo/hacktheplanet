@@ -18,7 +18,6 @@ class Marquee
 
   def each_column(&blk)
     return enum_for(:each_column) unless block_given?
-    ii = 0
     each_letter do |letter|
       if letter == "\t"
         yield_tab_spacing(&blk)
@@ -32,11 +31,11 @@ class Marquee
 
   def each_letter
     return enum_for(:each_letter) unless block_given?
-    ii = 0
     loop do
-      yield @string[ii]
-      ii = (ii + 1) % @string.length
-      yield "\t" if ii == 0
+      @string.each_char do |letter|
+        yield letter
+      end
+      yield "\t"
     end
   end
 
