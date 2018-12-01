@@ -31,4 +31,19 @@ class MarqueeTest < Minitest::Test
     no_repeat_columns = marquee.each_column(repeat: false).first(100)
     assert no_repeat_columns.length < columns.length
   end
+
+  def test_long_string
+    marquee = Marquee.new(really_long_string, @font)
+    10.times do
+      marquee.each_column(repeat: false) do |x|
+      end
+    end
+  end
+
+  private
+
+  def really_long_string
+    10000.times.map{('a'..'z').to_a.sample}.join
+  end
+
 end
