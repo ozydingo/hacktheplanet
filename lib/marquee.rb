@@ -2,9 +2,10 @@ require_relative 'font.rb'
 
 class Marquee
   class Options
-    attr_accessor :letter_spacing, :tab_spacing
+    attr_accessor :letter_spacing, :space_spacing, :tab_spacing
     def initialize
       @letter_spacing = 1
+      @space_spacing = 3
       @tab_spacing = 4
     end
   end
@@ -25,6 +26,8 @@ class Marquee
     each_letter(repeat: repeat) do |letter|
       if letter == "\t"
         yield_tab_spacing(&blk)
+      elsif letter == " "
+        yield_space(&blk)
       else
         columns = get_letter(letter)
         yield_letter_columns(columns, &blk)
@@ -66,6 +69,12 @@ class Marquee
     end
   end
 
+  def yield_space
+    @options.space_spacing.times do
+      yield [0] * @font.height
+    end
+  end
+
   def yield_tab_spacing
     @options.tab_spacing.times do
       yield [0] * @font.height
@@ -73,7 +82,7 @@ class Marquee
   end
 
   def preload_letters
-    each_letter(repeat: false) do |letter|
+    each_letter(repeat: false).lazy.reject{|ltr| /\s/ =~ ltr}.each do |letter|
       get_letter(letter)
     end
   end

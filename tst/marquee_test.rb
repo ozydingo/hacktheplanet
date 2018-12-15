@@ -4,7 +4,18 @@ require 'yaml'
 require_relative '../lib/marquee.rb'
 
 class MarqueeTest < Minitest::Test
-  TEST_STRING = "hello"
+  TEST_STRING = "hello world"
+
+  class << self
+    def update_fixtures
+      font = Font.load('data/font/3x5', 'txf')
+      marquee = Marquee.new(TEST_STRING, font)
+      columns = marquee.each_column.first(100)
+      File.open("tst/fixtures/hello_columns_100.yml", 'w') do |file|
+        file.puts YAML.dump(columns)
+      end
+    end
+  end
 
   def setup
     @font = Font.load('data/font/3x5', 'txf')
