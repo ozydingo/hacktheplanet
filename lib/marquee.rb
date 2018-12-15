@@ -14,6 +14,10 @@ class Marquee
     @string = string
     @font = font
     @string.length > 0 or raise ArgumentError, "Must provide non-zero length string"
+
+    @font_cache = {}
+
+    preload_letters
   end
 
   def each_column(repeat: true, &blk)
@@ -22,7 +26,7 @@ class Marquee
       if letter == "\t"
         yield_tab_spacing(&blk)
       else
-        columns = @font.get(letter).transpose
+        columns = get_letter(letter)
         yield_letter_columns(columns, &blk)
         yield_letter_spacing(&blk)
       end
@@ -42,6 +46,10 @@ class Marquee
 
   private
 
+  def get_letter(letter)
+    @font_cache[letter] ||= @font.get(letter).transpose
+  end
+
   def yield_letter_columns(columns)
     columns.each do |column|
       yield column
@@ -57,6 +65,12 @@ class Marquee
   def yield_tab_spacing
     @options.tab_spacing.times do
       yield [0] * @font.height
+    end
+  end
+
+  def preload_letters
+    each_letter(repeat: false) do |letter|
+      get_letter(letter)
     end
   end
 
