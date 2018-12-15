@@ -44,6 +44,10 @@ class Marquee
     end
   end
 
+  def get_column(n, repeat: true)
+    each_column(repeat: repeat).first(n + 1).last
+  end
+
   private
 
   def get_letter(letter)

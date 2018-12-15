@@ -10,6 +10,13 @@ class MarqueeTest < Minitest::Test
     @font = Font.load('data/font/3x5', 'txf')
   end
 
+  def test_get_column
+    marquee = Marquee.new(TEST_STRING, @font)
+    column = marquee.get_column(10)
+    reference = YAML.load(File.read("tst/fixtures/hello_columns_100.yml"))
+    assert column == reference[10]
+  end
+
   def test_each_letter_loops_letters
     marquee = Marquee.new(TEST_STRING, @font)
     letters = marquee.each_letter.first((TEST_STRING.length + 1) * 3)
